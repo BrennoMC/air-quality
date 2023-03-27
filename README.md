@@ -17,3 +17,5 @@ Os parâmetros contemplados pela estrutura do índice utilizado pela CETESB são
 Para cada poluente medido é calculado um índice, que é um valor adimensional.
 Dependendo do índice obtido, o ar recebe uma qualificação, que é uma nota para a qualidade do ar, além de
 uma cor.
+
+![Alt text](./imgs/intervalos-controle-ar.jpg "Índice de qualidade do ar")
