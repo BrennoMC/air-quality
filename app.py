@@ -46,10 +46,10 @@ quality = []
 def verify(poluente, qualidade):
     pessimo = True
 
-    for k, v in qualidade.items():
-        for v in v:
-            if v == poluente:
-                quality.append(f'{k}')
+    for key, value in qualidade.items():
+        for value in value:
+            if value == poluente:
+                quality.append(f'{key}')
                 pessimo = False
         
     if pessimo == True:
@@ -63,20 +63,25 @@ def prioridade(qualidade):
         if qualidade == 'Boa' and prioridade == 0:
             prioridade = 0
             indice = qualidade
+            texto = ''
         elif qualidade == 'Moderada' and prioridade <= 1:
             prioridade = 1
             indice = qualidade
+            texto = 'Pessoas de grupos sensíveis (crianças, idosos, e pessoas com doenças respiratórias e cardíacas) podem apresentar sintomas como tosse seca e cansaço. A população, em geral, não é afetada.'
         elif qualidade == 'Ruim' and prioridade <= 2:
             prioridade = 2
             indice = qualidade
+            texto = 'Toda a população pode apresentar sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta, Pessoas de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas) podem apresentar efeitos mais sérios na saúde.'
         elif qualidade == 'Muito Ruim' and prioridade <= 3:
             prioridade = 3
             indice = qualidade
+            texto = 'Toda a população pode apresentar agravamento dos sintomas como tosse seca, cansaço, ardor nos olhos, nariz e garganta e ainda falta de ar e respiração ofegante, Efeitos ainda mais graves à saúde de grupos sensíveis (crianças, idosos e pessoas com doenças respiratórias e cardíacas).'
         elif qualidade == 'Péssima' and prioridade <= 4:
             prioridade = 4
             indice = qualidade
+            texto = 'Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes premeaturas em pessoas de grupos sensíveis'
 
-    return indice
+    return [indice, texto]
 
 print("Insira os parametros abaixo")
 MP10 = float(input(" Partículas inaláveis (MP10): "))
@@ -93,7 +98,7 @@ verify(CO, CO_quality)
 verify(NO2, NO2_quality)
 verify(SO2, SO2_quality)
 
-print(quality)
-print(prioridade(quality))
+#print(quality)
 
-        
+teste = prioridade(quality)[0]
+print('\nQualidade do ar: {} \n\nRiscos a saúde: {}\n'.format(prioridade(quality)[0], prioridade(quality)[1]))
