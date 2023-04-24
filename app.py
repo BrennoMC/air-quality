@@ -5,7 +5,7 @@ print("MENU")
 
 print("1 - Inserção")
 print("2 - Exclusão")
-print("3 - Consulta")
+print("3 - Alteração")
 print("4 - Classificação")
 print("5 - Sair")
 
@@ -48,9 +48,60 @@ if option == 1:
             db.close()
         except:
             print("ALERTA: Erro ao tentar inserir no banco de dados")
-
 # elif option == 2:
 # elif option == 3:
+#         db = conn.connection()
+#         cursor = db.cursor()
+#         '''
+#             UPDATE `dbexemplo`.`funcionario` SET `data_nascimento` = '1981-03-19' WHERE (`codigo` = '1')
+#         '''
+#         try:
+#             codigo = int(input("Digite o código da amostra que deseja alterar: " ))
+#             coluna = input("\nDigite qual valor deseja alterar: [mp10, mp25, o3, co, no2, so2] ")
+            
+#             try:
+#                 print("Insira os parametros abaixo")
+#                 MP10 = float(input(" Partículas inaláveis (MP10): "))
+#                 MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
+#                 O3 = float(input(" Ozônio (O3): "))
+#                 CO = float(input(" Monóxido de carbono (CO2): "))
+#                 NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
+#                 SO2 = float(input(" Dióxido de enxofre (SO2): "))
+#             except: 
+#                 print("\nPor favor, digite um valor correto.\n")
+#             else:
+#                 query = 'UPDATE amostra SET mp10, mp25, o3, co, no2, so2 = (%s, %s, %s, %s, %s, %s) WHERE codigo = (%s)'
+#                 values = (MP10, MP25, O3, CO, NO2, SO2, codigo)
+#                 cursor.execute(query, values)
+#                 db.commit()
+#                 db.close()
+
+#             '''
+#                 codigo = int(input("Digite o código da amostra que deseja alterar: " ))
+#                 coluna = input("\nDigite qual valor deseja alterar: [mp10, mp25, o3, co, no2, so2] ")
+#                 novoValor = float(input('\nDigite o novo valor: '))
+
+#                 def alteraAmostra(valor, cod):
+#                     query = 'UPDATE amostra SET mp10 = (%s) WHERE codigo = (%s)'
+#                     values = (valor, cod)
+#                     cursor.execute(query, values)
+#                     db.commit()
+
+#                 if coluna in ['mp10', 'MP10', 'Mp10', 'mP10']:
+#                     alteraAmostra(novoValor, codigo)
+#                 elif coluna in ['mp25', 'MP25', 'Mp25', 'mP25']:
+#                     alteraAmostra(novoValor, codigo)
+#                 elif coluna in ['o3', 'O3']:
+#                     alteraAmostra(novoValor, codigo)
+#                 elif coluna in ['co', 'CO', 'cO', 'Co']:
+#                     alteraAmostra(novoValor, codigo)
+#                 elif coluna in ['no2', 'NO2', 'No2', 'nO2']:
+#                     alteraAmostra(novoValor, codigo)
+#                 elif coluna in ['so2', 'SO2', 'So2', 'sO2']:
+#                     alteraAmostra(novoValor, codigo)
+#             '''
+#         except:
+#             print("ALERTA: Erro ao tentar atualizar o banco de dados")
 elif option == 4:
         # cria um cursor para executar as queries
         db = conn.connection()
@@ -141,9 +192,10 @@ elif option == 4:
 
                 return [indice, texto]
             
+            id = int(input('Digite o código da amostra que deseja classificar: '))
             # executa o select para retornar a média de cada parâmetro
-            query = 'SELECT ROUND(AVG(mp10)), ROUND(AVG(mp25)), ROUND(AVG(o3)), ROUND(AVG(co)), ROUND(AVG(no2)), ROUND(AVG(so2)) FROM amostra'
-            cursor.execute(query)
+            query = 'SELECT ROUND(AVG(mp10)), ROUND(AVG(mp25)), ROUND(AVG(o3)), ROUND(AVG(co)), ROUND(AVG(no2)), ROUND(AVG(so2)) FROM amostra WHERE id = (%s)'
+            cursor.execute(query, id)
             result = cursor.fetchone()
             print("O código da analise inserida é: ", result)
 
