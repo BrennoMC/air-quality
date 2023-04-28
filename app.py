@@ -48,7 +48,27 @@ if option == 1:
             db.close()
         except:
             print("ALERTA: Erro ao tentar inserir no banco de dados")
-# elif option == 2:
+elif option == 2:
+        # cria um cursor para executar as queries
+        db = conn.connection()
+        cursor = db.cursor()
+
+        try:
+            
+            id = int(input('Digite o código da amostra que deseja classificar: '))
+         
+            query = 'DELETE FROM amostra WHERE id = (%s)'
+            cursor.execute(query, id)
+
+            # fecha a conexão com o banco de dados
+            db.close()
+        except:
+            print("ALERTA: Erro ao tentar consultar no banco de dados")
+
+else:
+    exit()
+
+
 # elif option == 3:
 #         db = conn.connection()
 #         cursor = db.cursor()
