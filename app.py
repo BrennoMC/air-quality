@@ -63,6 +63,7 @@ while True:
             # fecha a conexão com o banco de dados
             db.close()
         except:
+
             print("ALERTA: Erro ao tentar consultar no banco de dados")
     elif option == 3:
         db = conn.connection()
@@ -158,6 +159,7 @@ while True:
             print(err)
             print("ALERTA: Erro ao tentar atualizar o banco de dados")
     elif option == 4:
+=======
         # cria um cursor para executar as queries
         db = conn.connection()
         cursor = db.cursor()
