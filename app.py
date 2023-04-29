@@ -1,128 +1,165 @@
 import conn
 
-print('teste = ', conn.connection())
-print("MENU")
+while True:
 
-print("1 - Inserção")
-print("2 - Exclusão")
-print("3 - Alteração")
-print("4 - Classificação")
-print("5 - Sair")
+    print("MENU")
 
-option = int(input("Digite a opção desejada: "))
+    print("1 - Inserção")
+    print("2 - Exclusão")
+    print("3 - Alteração")
+    print("4 - Classificação")
+    print("5 - Sair")
 
-if option == 1:
-    # inserção dos dados de entrada
-    try:
-        print("Insira os parametros abaixo")
-        MP10 = float(input(" Partículas inaláveis (MP10): "))
-        MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
-        O3 = float(input(" Ozônio (O3): "))
-        CO = float(input(" Monóxido de carbono (CO2): "))
-        NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
-        SO2 = float(input(" Dióxido de enxofre (SO2): "))
-    except: 
-        print("\nPor favor, digite um valor correto.\n")
-    else: 
+    option = int(input("Digite a opção desejada: "))
 
-        # cria um cursor para executar as queries
-        db = conn.connection()
-        cursor = db.cursor()
-
+    if option == 1:
+        # inserção dos dados de entrada
         try:
-            # insere os dados na tabela
-            query = 'INSERT INTO amostra (mp10, mp25, o3, co, no2, so2) VALUES (%s, %s, %s, %s, %s, %s)'
-            values = (MP10, MP25, O3, CO, NO2, SO2)
-            cursor.execute(query, values)
-
-            # commita as alterações no banco de dados
-            db.commit()
-
-            # executa o select para retornar com a ultima linha de dados
-            query = 'SELECT * FROM amostra ORDER BY id DESC LIMIT 1;'
-            cursor.execute(query)
-            result = cursor.fetchone()
-            print("O código da analise inserida é: ", result[0])
-
-            # fecha a conexão com o banco de dados
-            db.close()
+            print("Insira os parametros abaixo")
+            MP10 = float(input(" Partículas inaláveis (MP10): "))
+            MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
+            O3 = float(input(" Ozônio (O3): "))
+            CO = float(input(" Monóxido de carbono (CO2): "))
+            NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
+            SO2 = float(input(" Dióxido de enxofre (SO2): "))
         except:
-            print("ALERTA: Erro ao tentar inserir no banco de dados")
-elif option == 2:
+            print("\nPor favor, digite um valor correto.\n")
+        else:
+
+            # cria um cursor para executar as queries
+            db = conn.connection()
+            cursor = db.cursor()
+
+            try:
+                # insere os dados na tabela
+                query = 'INSERT INTO amostra (mp10, mp25, o3, co, no2, so2) VALUES (%s, %s, %s, %s, %s, %s)'
+                values = (MP10, MP25, O3, CO, NO2, SO2)
+                cursor.execute(query, values)
+
+                # commita as alterações no banco de dados
+                db.commit()
+
+                # executa o select para retornar com a ultima linha de dados
+                query = 'SELECT * FROM amostra ORDER BY id DESC LIMIT 1;'
+                cursor.execute(query)
+                result = cursor.fetchone()
+                print("O código da analise inserida é: ", result[0])
+
+                # fecha a conexão com o banco de dados
+                db.close()
+            except:
+                print("ALERTA: Erro ao tentar inserir no banco de dados")
+    elif option == 2:
         # cria um cursor para executar as queries
         db = conn.connection()
         cursor = db.cursor()
 
         try:
-            
-            id = int(input('Digite o código da amostra que deseja classificar: '))
-         
+            id = int(input('Digite o código da amostra que deseja deletar: '))
+
             query = 'DELETE FROM amostra WHERE id = (%s)'
             cursor.execute(query, id)
 
             # fecha a conexão com o banco de dados
             db.close()
         except:
+
             print("ALERTA: Erro ao tentar consultar no banco de dados")
+    elif option == 3:
+        db = conn.connection()
+        cursor = db.cursor()
+        try:
+            #     id = int(input("Digite o código da amostra que deseja alterar: "))
+            #     try:
+            #         print("Insira os parametros abaixo")
+            #         MP10 = float(input(" Partículas inaláveis (MP10): "))
+            #         MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
+            #         O3 = float(input(" Ozônio (O3): "))
+            #         CO = float(input(" Monóxido de carbono (CO2): "))
+            #         NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
+            #         SO2 = float(input(" Dióxido de enxofre (SO2): "))
+            #     except:
+            #         print("\nPor favor, digite um valor correto.\n")
+            #     else:
+            #         print(MP10, MP25, O3, CO, NO2, SO2, id)
+            #         query = 'UPDATE amostra SET mp10 = (%s), mp25 = (%s), o3 = (%s), co = (%s), no2 = (%s), so2 = (%s) WHERE id = (%s)'
+            #         values = (MP10, MP25, O3, CO, NO2, SO2, id)
+            #         cursor.execute(query, values)
+            #         db.commit()
+            #         print("Atualização realizada com sucesso.")
+            #         db.close()
 
-else:
-    exit()
+            # 2° Opção de update
+            id = int(input("Digite o código da amostra que deseja alterar: "))
+            coluna = input(
+                "\nDigite qual valor deseja alterar: [mp10, mp25, o3, co, no2, so2] = ")
 
+            def alteraAmostra(col, valor, cod):
+                query = "UPDATE amostra SET {} = %s WHERE id = %s".format(
+                    col)
+                values = (valor, cod)
+                cursor.execute(query, values)
+                db.commit()
 
-# elif option == 3:
-#         db = conn.connection()
-#         cursor = db.cursor()
-#         '''
-#             UPDATE `dbexemplo`.`funcionario` SET `data_nascimento` = '1981-03-19' WHERE (`codigo` = '1')
-#         '''
-#         try:
-#             codigo = int(input("Digite o código da amostra que deseja alterar: " ))
-#             coluna = input("\nDigite qual valor deseja alterar: [mp10, mp25, o3, co, no2, so2] ")
-            
-#             try:
-#                 print("Insira os parametros abaixo")
-#                 MP10 = float(input(" Partículas inaláveis (MP10): "))
-#                 MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
-#                 O3 = float(input(" Ozônio (O3): "))
-#                 CO = float(input(" Monóxido de carbono (CO2): "))
-#                 NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
-#                 SO2 = float(input(" Dióxido de enxofre (SO2): "))
-#             except: 
-#                 print("\nPor favor, digite um valor correto.\n")
-#             else:
-#                 query = 'UPDATE amostra SET mp10, mp25, o3, co, no2, so2 = (%s, %s, %s, %s, %s, %s) WHERE codigo = (%s)'
-#                 values = (MP10, MP25, O3, CO, NO2, SO2, codigo)
-#                 cursor.execute(query, values)
-#                 db.commit()
-#                 db.close()
+                print("\n=======================================")
+                print("Alteração realizada com sucesso.")
+                print("=======================================\n")
+                db.close()
 
-#             '''
-#                 codigo = int(input("Digite o código da amostra que deseja alterar: " ))
-#                 coluna = input("\nDigite qual valor deseja alterar: [mp10, mp25, o3, co, no2, so2] ")
-#                 novoValor = float(input('\nDigite o novo valor: '))
-
-#                 def alteraAmostra(valor, cod):
-#                     query = 'UPDATE amostra SET mp10 = (%s) WHERE codigo = (%s)'
-#                     values = (valor, cod)
-#                     cursor.execute(query, values)
-#                     db.commit()
-
-#                 if coluna in ['mp10', 'MP10', 'Mp10', 'mP10']:
-#                     alteraAmostra(novoValor, codigo)
-#                 elif coluna in ['mp25', 'MP25', 'Mp25', 'mP25']:
-#                     alteraAmostra(novoValor, codigo)
-#                 elif coluna in ['o3', 'O3']:
-#                     alteraAmostra(novoValor, codigo)
-#                 elif coluna in ['co', 'CO', 'cO', 'Co']:
-#                     alteraAmostra(novoValor, codigo)
-#                 elif coluna in ['no2', 'NO2', 'No2', 'nO2']:
-#                     alteraAmostra(novoValor, codigo)
-#                 elif coluna in ['so2', 'SO2', 'So2', 'sO2']:
-#                     alteraAmostra(novoValor, codigo)
-#             '''
-#         except:
-#             print("ALERTA: Erro ao tentar atualizar o banco de dados")
-elif option == 4:
+            if coluna.lower() == 'mp10':
+                print("Insira o parametro abaixo")
+                try:
+                    MP10 = float(input(" Partículas inaláveis (MP10): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna.lower(), MP10, id)
+            elif coluna.lower() == 'mp25':
+                print("Insira o parametro abaixo")
+                try:
+                    MP25 = float(
+                        input(" Partículas inaláveis finas (MP2,5): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna, MP25, id)
+            elif coluna.lower() == 'o3':
+                print("Insira o parametro abaixo")
+                try:
+                    O3 = float(input(" Ozônio (O3): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna, O3, id)
+            elif coluna.lower() == 'co':
+                print("Insira o parametro abaixo")
+                try:
+                    CO = float(input(" Monóxido de carbono (CO2): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna, CO, id)
+            elif coluna.lower() == 'no2':
+                print("Insira o parametro abaixo")
+                try:
+                    NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna, NO2, id)
+            elif coluna.lower() == 'so2':
+                print("Insira o parametro abaixo")
+                try:
+                    SO2 = float(input(" Dióxido de enxofre (SO2): "))
+                except:
+                    print("\nPor favor, digite um valor correto.\n")
+                else:
+                    alteraAmostra(coluna, SO2, id)
+        except db.Error as err:
+            print(err)
+            print("ALERTA: Erro ao tentar atualizar o banco de dados")
+    elif option == 4:
+=======
         # cria um cursor para executar as queries
         db = conn.connection()
         cursor = db.cursor()
@@ -130,44 +167,44 @@ elif option == 4:
         try:
             MP10_quality = {
                 'Boa': list(range(0, 51)),
-                'Moderada': list(range(51, 101)), 
-                'Ruim': list(range(101, 151)), 
-                'Muito Ruim': list(range(151, 251))    
+                'Moderada': list(range(51, 101)),
+                'Ruim': list(range(101, 151)),
+                'Muito Ruim': list(range(151, 251))
             }
 
             MP25_quality = {
                 'Boa': list(range(0, 26)),
-                'Moderada': list(range(26, 51)), 
-                'Ruim': list(range(51, 76)), 
-                'Muito Ruim': list(range(76, 126))    
+                'Moderada': list(range(26, 51)),
+                'Ruim': list(range(51, 76)),
+                'Muito Ruim': list(range(76, 126))
             }
 
             O3_quality = {
                 'Boa': list(range(0, 101)),
-                'Moderada': list(range(101, 131)), 
-                'Ruim': list(range(131, 161)), 
-                'Muito Ruim': list(range(161, 201))    
+                'Moderada': list(range(101, 131)),
+                'Ruim': list(range(131, 161)),
+                'Muito Ruim': list(range(161, 201))
             }
 
             CO_quality = {
                 'Boa': list(range(0, 10)),
-                'Moderada': list(range(10, 12)), 
-                'Ruim': list(range(12, 14)), 
-                'Muito Ruim': list(range(14, 16))    
+                'Moderada': list(range(10, 12)),
+                'Ruim': list(range(12, 14)),
+                'Muito Ruim': list(range(14, 16))
             }
 
             NO2_quality = {
                 'Boa': list(range(0, 201)),
-                'Moderada': list(range(201, 241)), 
-                'Ruim': list(range(241, 321)), 
-                'Muito Ruim': list(range(321, 1131))    
+                'Moderada': list(range(201, 241)),
+                'Ruim': list(range(241, 321)),
+                'Muito Ruim': list(range(321, 1131))
             }
 
             SO2_quality = {
                 'Boa': list(range(0, 21)),
-                'Moderada': list(range(21, 41)), 
-                'Ruim': list(range(41, 366)), 
-                'Muito Ruim': list(range(366, 801))    
+                'Moderada': list(range(21, 41)),
+                'Ruim': list(range(41, 366)),
+                'Muito Ruim': list(range(366, 801))
             }
 
             quality = []
@@ -180,7 +217,7 @@ elif option == 4:
                         if value == poluente:
                             quality.append(f'{key}')
                             pessimo = False
-                    
+
                 if pessimo == True:
                     quality.append('Péssima')
 
@@ -211,13 +248,14 @@ elif option == 4:
                         texto = 'Toda a população pode apresentar sérios riscos de manifestações de doenças respiratórias e cardiovasculares. Aumento de mortes premeaturas em pessoas de grupos sensíveis'
 
                 return [indice, texto]
-            
-            id = int(input('Digite o código da amostra que deseja classificar: '))
+
             # executa o select para retornar a média de cada parâmetro
-            query = 'SELECT ROUND(AVG(mp10)), ROUND(AVG(mp25)), ROUND(AVG(o3)), ROUND(AVG(co)), ROUND(AVG(no2)), ROUND(AVG(so2)) FROM amostra WHERE id = (%s)'
-            cursor.execute(query, id)
+            query = 'SELECT ROUND(AVG(mp10)), ROUND(AVG(mp25)), ROUND(AVG(o3)), ROUND(AVG(co)), ROUND(AVG(no2)), ROUND(AVG(so2)) FROM amostra'
+            cursor.execute(query)
             result = cursor.fetchone()
-            print("O código da analise inserida é: ", result)
+
+            print("\n||=================================================================")
+            # print("\n||  O código da analise inserida é: ", result, " ||")
 
             MP10 = result[0]
             MP25 = result[1]
@@ -233,60 +271,64 @@ elif option == 4:
             verify(NO2, NO2_quality)
             verify(SO2, SO2_quality)
 
-            teste = prioridade(quality)[0]
-            print('\nQualidade do ar: {} \n\nRiscos a saúde: {}\n'.format(prioridade(quality)[0], prioridade(quality)[1]))
-
+            print('\n||  Qualidade do ar: {} || \n\n||  Riscos a saúde: {}  ||\n'.format(
+                prioridade(quality)[0], prioridade(quality)[1]))
+            print("||=================================================================||")
             # fecha a conexão com o banco de dados
             db.close()
         except:
-            print("ALERTA: Erro ao tentar consultar no banco de dados")
+            print("\nALERTA: Erro ao tentar consultar no banco de dados")
 
-else:
-    exit()
+    elif option == 5:
+        print("\nOBRIGADO POR USAR ESSE PROGRAMA!\n")
+        exit()
+        break
+    else:
+        exit()
 
 
 # -------------------------------------- PROGRAMA SEM O BANCO --------------------------------------
 
 # MP10_quality = {
 #     'Boa': list(range(0, 51)),
-#     'Moderada': list(range(51, 101)), 
-#     'Ruim': list(range(101, 151)), 
-#     'Muito Ruim': list(range(151, 251))    
+#     'Moderada': list(range(51, 101)),
+#     'Ruim': list(range(101, 151)),
+#     'Muito Ruim': list(range(151, 251))
 # }
 
 # MP25_quality = {
 #     'Boa': list(range(0, 26)),
-#     'Moderada': list(range(26, 51)), 
-#     'Ruim': list(range(51, 76)), 
-#     'Muito Ruim': list(range(76, 126))    
+#     'Moderada': list(range(26, 51)),
+#     'Ruim': list(range(51, 76)),
+#     'Muito Ruim': list(range(76, 126))
 # }
 
 # O3_quality = {
 #     'Boa': list(range(0, 101)),
-#     'Moderada': list(range(101, 131)), 
-#     'Ruim': list(range(131, 161)), 
-#     'Muito Ruim': list(range(161, 201))    
+#     'Moderada': list(range(101, 131)),
+#     'Ruim': list(range(131, 161)),
+#     'Muito Ruim': list(range(161, 201))
 # }
 
 # CO_quality = {
 #     'Boa': list(range(0, 10)),
-#     'Moderada': list(range(10, 12)), 
-#     'Ruim': list(range(12, 14)), 
-#     'Muito Ruim': list(range(14, 16))    
+#     'Moderada': list(range(10, 12)),
+#     'Ruim': list(range(12, 14)),
+#     'Muito Ruim': list(range(14, 16))
 # }
 
 # NO2_quality = {
 #     'Boa': list(range(0, 201)),
-#     'Moderada': list(range(201, 241)), 
-#     'Ruim': list(range(241, 321)), 
-#     'Muito Ruim': list(range(321, 1131))    
+#     'Moderada': list(range(201, 241)),
+#     'Ruim': list(range(241, 321)),
+#     'Muito Ruim': list(range(321, 1131))
 # }
 
 # SO2_quality = {
 #     'Boa': list(range(0, 21)),
-#     'Moderada': list(range(21, 41)), 
-#     'Ruim': list(range(41, 366)), 
-#     'Muito Ruim': list(range(366, 801))    
+#     'Moderada': list(range(21, 41)),
+#     'Ruim': list(range(41, 366)),
+#     'Muito Ruim': list(range(366, 801))
 # }
 
 # quality = []
@@ -299,7 +341,7 @@ else:
 #             if value == poluente:
 #                 quality.append(f'{key}')
 #                 pessimo = False
-        
+
 #     if pessimo == True:
 #         quality.append('Péssima')
 
@@ -332,7 +374,7 @@ else:
 #     return [indice, texto]
 
 # while True:
-#     try:  
+#     try:
 #         print("\nInsira os parametros abaixo\n")
 #         MP10 = float(input(" Partículas inaláveis (MP10): "))
 #         MP25 = float(input(" Partículas inaláveis finas (MP2,5): "))
@@ -354,7 +396,5 @@ else:
 
 #             teste = prioridade(quality)[0]
 #             print('\nQualidade do ar: {} \n\nRiscos a saúde: {}\n'.format(prioridade(quality)[0], prioridade(quality)[1]))
-#     except: 
+#     except:
 #         print("\nPor favor, digite um valor correto.\n")
-
-
