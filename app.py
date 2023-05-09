@@ -140,6 +140,23 @@ def delete_data():
     except:
         print("ALERTA: Erro ao tentar consultar o banco de dados")
     try:
+        # executa o select para retornar a média de cada parâmetro
+        query = 'SELECT * FROM amostra'
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        print("\n||=================================================================")
+        # print("\n||  O código da analise inserida é: ", result, " ||")
+        
+        for n in result:
+            print(f'ID: {n[0]}', end=' | ')
+            print(f'MP10: {n[1]}', end=' | ')
+            print(f'MP25: {n[2]}', end=' | ')
+            print(f'O3: {n[3]}', end=' | ')
+            print(f'CO: {n[4]}', end=' | ')
+            print(f'NO2: {n[5]}', end=' | ')
+            print(f'SO2: {n[6]}')
+
         id = int(input('Digite o código da amostra que deseja deletar: '))
 
         query = 'DELETE FROM amostra WHERE id = (%s);'
