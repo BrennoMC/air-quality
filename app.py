@@ -1,4 +1,3 @@
-
 import conn
 import mysql.connector
 from mysql.connector import Error
@@ -273,6 +272,8 @@ def classify_data():
         verify(CO, CO_quality)
         verify(NO2, NO2_quality)
         verify(SO2, SO2_quality)
+
+        print('\nMP10: {}, MP2,5: {}, 03: {}, CO: {}, NO2: {}, SO2: {}'.format(MP10, MP25, O3, CO, NO2, SO2))
 
         print('\n||  Qualidade do ar: {} || \n\n||  Riscos a saúde: {}  ||\n'.format(
             prioridade(quality)[0], prioridade(quality)[1]))
