@@ -2,6 +2,8 @@ import mysql.connector
 
 
 global db
+
+
 def connection():
     try:
         db = mysql.connector.connect(
@@ -11,7 +13,7 @@ def connection():
             database='heroku_8a27ec8860e820b',
             # reconnect=True
         )
-        print("Conexão bem sucedida!")
+
     except mysql.connector.Error as error:
-        print("Erro ao tentar conectar ao banco de dados:", error)
+        print("Erro ao tentar conectar ao banco de dados. \nEntre em contato com o administrador do servidor.")
     return db
