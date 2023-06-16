@@ -1,6 +1,8 @@
 import conn
 import mysql.connector
 from mysql.connector import Error
+import os
+
 
 MP10_quality = {
     'Boa': list(range(0, 51)),
@@ -112,7 +114,6 @@ def insert_data():
         CO = float(input(" Monóxido de carbono (CO2): "))
         NO2 = float(input(" Dióxido de nitrogênio (NO2): "))
         SO2 = float(input(" Dióxido de enxofre (SO2): "))
-
     except ValueError:
         print("\nPor favor, digite um valor correto.\n")
 
@@ -132,7 +133,10 @@ def insert_data():
         query = 'SELECT * FROM amostra ORDER BY id DESC LIMIT 1;'
         cursor.execute(query)
         result = cursor.fetchone()
-        print("O código da analise inserida é: ", result[0])
+
+        os.system("cls")
+        print(
+            f"\nSua análise foi inserida com sucesso. \nO código da análise inserida é: {result[0]}\n")
 
         # fecha a conexão com o banco de dados
         db.close()
@@ -153,8 +157,7 @@ def delete_data():
         cursor.execute(query)
         result = cursor.fetchall()
 
-        print("\n||=================================================================")
-        # print("\n||  O código da analise inserida é: ", result, " ||")
+        print('=-'*40, '\n')
 
         for n in result:
             print(f'ID: {n[0]}', end=' | ')
@@ -164,6 +167,8 @@ def delete_data():
             print(f'CO: {n[4]}', end=' | ')
             print(f'NO2: {n[5]}', end=' | ')
             print(f'SO2: {n[6]}')
+
+        print('\n', '=-' * 40)
 
         id = int(input('Digite o código da amostra que deseja deletar: '))
 
@@ -276,8 +281,6 @@ def classify_data():
         cursor.execute(query)
         result = cursor.fetchone()
 
-        # print("\n||  O código da analise inserida é: ", result, " ||")
-
         MP10 = result[0]
         MP25 = result[1]
         O3 = result[2]
@@ -310,7 +313,8 @@ while True:
 
     option = int(input("Digite a opção desejada: "))
 
-    if option == 1:  # inserção dos dados de entrada
+    # inserção dos dados de entrada
+    if option == 1:
         insert_data()
     elif option == 2:
         delete_data()
